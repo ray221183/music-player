@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="music_player.css" rel="stylesheet">
+        <meta charset="utf-8">
+        <title>Listen</title>
+    </head>
+    <body>
+        <div class="player">
+            <div id="play">
+                <svg class="play-button" width="80px" height="80px" onclick="changeState()">
+                    <circle cx="40px" cy="40px" r="40px" fill="var(--color-1)"/>
+                    <path d="M26,20 26,60 60,40" id="play-path" style="fill:var(--color-2);stroke:none;stroke-width:1" />
+                </svg>
+            </div>
+            <div id="next">
+                <svg class="change-song-button" width="80px" height="80px" onclick="changeSongIndex(1)">
+                    <polygon points="20,27 20,53 32,44 32,53 49,40 32,27 32,36" style="white;stroke:none;stroke-width:1" />
+                </svg>
+            </div>
+            <div id="last">
+                <svg class="change-song-button" width="80px" height="80px" onclick="changeSongIndex(-1)">
+                    <polygon points="50,27 50,53 38,44 38,53 21,40 38,27 38,36" style="stroke:none;stroke-width:1" />
+                </svg>
+            </div>
+            <div id="name-of-song"></div>
+            <div id="background"></div>
+        </div>
+
+        <script>
+            var songList = ['music/我愛你不問歸期.mp3', 'music/那些你很冒險的夢.mp3', 'music/地球上最浪漫的一首歌.mp3', 'music/me_and_my_broken_heart.mp3']; //list of all songs
+            var songNameList = ['我愛你不問歸期', '那些你很冒險的夢', '地球上最浪漫的一首歌', 'Me and My Broken Heart'] //list of song's name
+            var backgroundList = ['picture/boat.jpg', 'picture/snow.jpg', 'picture/earth_romantic_song.jpg', 'picture/sunset.jpg']; //list of background picture
+            var songIndex = 1; //the index of playing song
+            var state = false; //false: pause, true: play
+            var music = document.createElement("audio"); //declare a music file
+            music.setAttribute("src", songList[songIndex]); //initialize the music file
+            var songName = document.getElementById("name-of-song"); //declare the song name
+            songName.innerHTML = songNameList[songIndex];
+            var background = document.getElementById("background"); //declare the background
+            background.style.background = "linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.9), rgba(0,0,0,1)), " + "url("+ backgroundList[songIndex] +")";
+            function changeSongIndex(change){ //change song
+                songIndex += change;
+                if(songIndex<0) songIndex=0;
+                if(songIndex>songList.length-1) songIndex=songList.length-1;
+                music.setAttribute('src', songList[songIndex]);
+                songName.innerHTML = songNameList[songIndex];
+                background.style.background = "linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.9), rgba(0,0,0,1)), " + "url("+ backgroundList[songIndex] +")";
+                state = true;
+                playOrPause();
+            }
+            function changeState(){ //turn on or turn off the current song
+                state = !state;
+                playOrPause();
+            }
+            function playOrPause(){ //decide whether to play the current song
+                if(state){
+                    music.play();
+                    document.getElementById("play-path").setAttribute("d", "M26,25 26,55 37,55 37,25 M43,25 43,55 54,55 54,25");
+                    console.log("play");
+                }
+                else{
+                    music.pause();
+                    document.getElementById("play-path").setAttribute("d", "M26,20 26,60 60,40");
+                    console.log("pause");
+                    
+                }
+            }
+        </script>
+    </body>
+</html>

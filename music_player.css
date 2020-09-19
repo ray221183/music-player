@@ -1,0 +1,80 @@
+#name-of-song{
+    position: absolute; 
+    text-align: center; 
+    top: 72%; 
+    width: 100%;
+    z-index: 2;
+    font-size: 22px;
+    color: white;
+    /* animation-name: marquee;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; */
+}
+@keyframes marquee{
+    0%   { left:100%; top:73%; }
+    100% { left:-50%; top:73%; }
+}
+.player{
+    position: relative;
+    top: 50px;
+    left: 50%;
+    margin: 0px 0px 0px -200px;
+    max-width: 400px;
+    height: 600px;
+    /* border: 3px solid black; */
+}
+#play{ /*play buttom*/
+    position: absolute;
+    width: 80px;
+    height:80px;
+    top: 80%;
+    left:50%;
+    margin-left: -40px;
+    /* border: 3px solid rgb(167, 29, 132); */
+    z-index: 2;
+}
+
+
+#next{
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    top: 80%;
+    left: 61%;
+    /* border: 3px solid rgb(167, 29, 132); */
+    z-index: 2;
+}
+#last{
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    top: 80%;
+    left: 21.5%;
+    /* border: 3px solid rgb(167, 29, 132); */
+    z-index: 2;
+}
+
+.play-button{
+    --color-1: rgb(255, 115, 0);
+    --color-2: rgb(233, 229, 229);
+    transition-duration: 10s;
+}
+.play-button:hover{
+    --color-1: rgb(245, 149, 23);
+    --color-2: white;
+}
+.change-song-button polygon{
+    fill: rgb(233, 229, 229);
+}
+.change-song-button polygon:hover {
+    fill: white;
+}
+#background{
+    position: absolute;
+    width: 100%;
+    height:100%;
+    /* border: 3px solid rgb(79, 228, 74); */
+    z-index:1;
+    background-size: cover;
+}
