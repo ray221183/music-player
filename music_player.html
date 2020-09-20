@@ -7,38 +7,136 @@
     </head>
     <body>
         <div class="player">
-            <div id="play">
-                <svg class="play-button" width="80px" height="80px" onclick="changeState()">
-                    <circle cx="40px" cy="40px" r="40px" fill="var(--color-1)"/>
-                    <path d="M26,20 26,60 60,40" id="play-path" style="fill:var(--color-2);stroke:none;stroke-width:1" />
-                </svg>
-            </div>
-            <div id="next">
-                <svg class="change-song-button" width="80px" height="80px" onclick="changeSongIndex(1)">
-                    <polygon points="20,27 20,53 32,44 32,53 49,40 32,27 32,36" style="white;stroke:none;stroke-width:1" />
-                </svg>
-            </div>
-            <div id="last">
-                <svg class="change-song-button" width="80px" height="80px" onclick="changeSongIndex(-1)">
-                    <polygon points="50,27 50,53 38,44 38,53 21,40 38,27 38,36" style="stroke:none;stroke-width:1" />
-                </svg>
+            <div class="command-area">
+                <div id="play">
+                    <svg class="play-button" width="80px" height="80px" onclick="changeState()">
+                        <circle cx="40px" cy="40px" r="40px" fill="var(--color-1)"/>
+                        <path d="M26,20 26,60 60,40" id="play-path" style="fill:var(--color-2);stroke:none;stroke-width:1" />
+                    </svg>
+                </div>
+                <div id="next">
+                    <svg class="change-song-button" width="80px" height="80px" onclick="changeSongIndex(1)">
+                        <polygon points="20,27 20,53 32,44 32,53 49,40 32,27 32,36" style="stroke:none;stroke-width:1" />
+                    </svg>
+                </div>
+                <div id="last">
+                    <svg class="change-song-button" width="80px" height="80px" onclick="changeSongIndex(-1)">
+                        <polygon points="50,27 50,53 38,44 38,53 21,40 38,27 38,36" style="stroke:none;stroke-width:1" />
+                    </svg>
+                </div>
+                <div id="replay">
+                    <svg id="replay-button-svg" width="80px" height="80px" onclick="changeReplay()">
+                        <path id="replay-button" d="M20,45 h-5 a15,15 0 1 0 15,-15 v-5 l-7.5,7.5 7.5,7.5 v-5 a10,10 0 1 1 -10,10z" style="stroke:none; stroke-width:1" />
+                    </svg>
+                </div>
+                <div id="volume">
+                    <svg id="volume-svg" width="80px" height="80px" onmouseover="dicideVolumeDisplay(true);" onmouseout="dicideVolumeDisplay(false);">
+                        <path id="volume-button" d="M25,37 v6 h6 l5,5 v-16 l-5,5z M38,37 a3,3 0 1 1 0,6z M38,32 a8,8 0 1 1 0,16 v-2 a6,6 0 1 0 0,-12z M38,29 a11,11 0 1 1 0,22 v2 a13,13 0 1 0 0,-26z">
+                    </svg>
+                </div>
             </div>
             <div id="name-of-song"></div>
             <div id="background"></div>
         </div>
 
         <script>
+            ////////////////////////////
+            ////////////////////////////
+            //initialize elements
             var songList = ['music/我愛你不問歸期.mp3', 'music/那些你很冒險的夢.mp3', 'music/地球上最浪漫的一首歌.mp3', 'music/me_and_my_broken_heart.mp3']; //list of all songs
             var songNameList = ['我愛你不問歸期', '那些你很冒險的夢', '地球上最浪漫的一首歌', 'Me and My Broken Heart'] //list of song's name
             var backgroundList = ['picture/boat.jpg', 'picture/snow.jpg', 'picture/earth_romantic_song.jpg', 'picture/sunset.jpg']; //list of background picture
             var songIndex = 1; //the index of playing song
             var state = false; //false: pause, true: play
+            var replay = false; //false: no replay, true: replay
+            var volumeDisplay = false; //false: not display, true: display
             var music = document.createElement("audio"); //declare a music file
-            music.setAttribute("src", songList[songIndex]); //initialize the music file
             var songName = document.getElementById("name-of-song"); //declare the song name
-            songName.innerHTML = songNameList[songIndex];
             var background = document.getElementById("background"); //declare the background
+            var commandArea = document.querySelector(".command-area");
+            var replayButton = document.getElementById("replay-button");
+            var volumeButtonSvg = document.getElementById("volume-svg");
+            var volumeButton = document.getElementById("volume-button");
+            
+            music.setAttribute("src", songList[songIndex]); //initialize the music file
+            songName.innerHTML = songNameList[songIndex];
+            
             background.style.background = "linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.9), rgba(0,0,0,1)), " + "url("+ backgroundList[songIndex] +")";
+            
+            volumeButton.style.fill = "#FAFAFA";
+            volumeButton.style.opacity = "0";
+            
+            replayButton.style.fill = "#FAFAFA";
+            replayButton.style.opacity = "0";
+            ////////////////////////////
+            ////////////////////////////
+            //handle replaybutton
+            commandArea.addEventListener("mouseover", function(){
+                decideReplayColor();
+                displayVolume();
+            })
+            commandArea.addEventListener("mouseout", function(){
+                if(replay){
+                    replayButton.style.fill = "#FAFAFA";
+                    replayButton.style.opacity = "1";
+                }
+                else{
+                    replayButton.style.fill = "#FAFAFA";
+                    replayButton.style.opacity = "0";
+                }
+                volumeButton.style.fill = "#FAFAFA";
+                volumeButton.style.opacity = "0";
+            })
+            ////////////////////////////
+            ////////////////////////////
+            //define functions
+            function dicideVolumeDisplay( displayOrNot ){
+                volumeDisplay = displayOrNot;
+                console.log(volumeDisplay);
+            }
+            function displayVolume(){
+                console.log("1")
+                if(volumeDisplay){
+                    volumeButton.style.fill = "#FAFAFA";
+                    volumeButton.style.opacity = "1";
+                }
+                else{
+                    volumeButton.style.fill = "#FAFAFA";
+                    volumeButton.style.opacity = "0.2";
+                }
+            }
+            function setVolume( propotion ){
+                music.volume = propotion;
+            }
+            function decideReplayColor(){
+                if(replay){
+                    replayButton.style.fill = "#FAFAFA";
+                    replayButton.style.opacity = "1";
+                }
+                else{
+                    replayButton.style.fill = "#FAFAFA";
+                    replayButton.style.opacity = "0.2";
+                }
+            }
+            function endMusic(){
+                console.log('in');
+                if(replay){
+                    state = true;
+                    playOrPause();
+                }
+                else if(songIndex==songList.length-1){
+                    state = false;
+                    playOrPause();
+                }
+                else{
+                    changeSongIndex(1);
+                }
+            }
+            function changeReplay(){
+                replay = !replay;
+                decideReplayColor();
+                console.log("replay");
+            }
             function changeSongIndex(change){ //change song
                 songIndex += change;
                 if(songIndex<0) songIndex=0;
@@ -66,6 +164,8 @@
                     
                 }
             }
+            ////////////////////////////
+            ////////////////////////////
         </script>
     </body>
 </html>
